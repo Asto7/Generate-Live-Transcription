@@ -145,7 +145,7 @@ class Box {
       this.box.innerHTML =
         "<strong style = 'color: #6fc21c; font-family:  monospace;'>Asto/ </strong> ";
       this.clearCaptionId = null;
-    }, 2000);
+    }, 4000);
   }
 
   init() {
