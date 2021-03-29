@@ -93,7 +93,7 @@ class Box {
 
   handleMouseMove(e) {
     const boxRect = this.box.getBoundingClientRect();
-    this.box.style.top = `${boxRect.top + e.movementY * 0.8}px`;
+    this.box.style.top = `${boxRect.top + e.movementY}px`;
     this.box.style.left = `${boxRect.left + e.movementX}px`;
   }
 
