@@ -50,7 +50,8 @@ function liveTranscription(message, sender, sendResponse) {
 class Box {
   constructor() {
     let boxTemp = document.createElement("div");
-    boxTemp.innerHTML = "--> ";
+    boxTemp.innerHTML =
+      "<strong style = 'color: #6fc21c; font-family:  monospace;'>Asto/ </strong> ";
     boxTemp.className = "box";
     boxTemp.style["color"] = "white";
     boxTemp.style["fontSize"] = "2em";
