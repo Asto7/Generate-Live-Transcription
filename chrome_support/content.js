@@ -62,13 +62,13 @@ class Box {
     boxTemp.style["background"] = "rgba(0,0,0,0.7)";
     boxTemp.style["width"] = "80%";
     boxTemp.style["padding"] = "7px";
-    boxTemp.style["maxHeight"] = "60px";
     boxTemp.style["userSelect"] = "none";
     boxTemp.style["borderRadius"] = "0.8em";
     boxTemp.style["zIndex"] = "100000";
 
     document.body.appendChild(boxTemp);
     this.box = boxTemp;
+    this.clearCaptionId = null;
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
@@ -122,6 +122,9 @@ class Box {
   }
 
   addText(text) {
+    if (this.clearCaptionId) clearTimeout(this.clearCaptionId);
+    this.clearCaptionId = null;
+
     let spanElm = document.createElement("span");
     spanElm.innerHTML = " " + text;
     this.box.appendChild(spanElm);
@@ -137,6 +140,12 @@ class Box {
         if (lines < 2) break;
       }
     }
+
+    this.clearCaptionId = setTimeout(() => {
+      this.box.innerHTML =
+        "<strong style = 'color: #6fc21c; font-family:  monospace;'>Asto/ </strong> ";
+      this.clearCaptionId = null;
+    }, 2000);
   }
 
   init() {
