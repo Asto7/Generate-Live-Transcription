@@ -1,0 +1,13 @@
+{
+  "name": "generate-transcription",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "deepspeech": "^0.9.3",
+    "node-vad": "^1.1.4",
+    "socket.io": "^2.4.1"
+  },
+  "scripts": {
+    "start": "node server.js"
+  }
+}

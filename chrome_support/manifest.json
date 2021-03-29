@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+  "name": "generate-transcription",
+  "version": "0.2",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "background": {
+    "page": "background.html"
+  },
+  "permissions": ["tabCapture", "desktopCapture", "tabs", "desktopCapture"],
+  "browser_action": {
+    "default_icon": "./assets/logo.png",
+    "default_popup": "popup.html"
+  }
+}

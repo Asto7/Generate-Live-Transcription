@@ -1,0 +1,47 @@
+body {
+  background-color: white;
+  width: 180px;
+  color: black;
+  text-align: left;
+}
+h2 {
+  text-align: center;
+  margin-bottom: 0px;
+}
+hr {
+  border: 0.3px solid black;
+}
+
+img {
+  margin-left: 10px;
+}
+
+span {
+  font-weight: bolder;
+}
+
+#footer {
+  font-size: 10px;
+  text-align: center;
+}
+
+#footer i {
+  color: #a31010;
+}
+#subscribeBtn {
+  letter-spacing: 2px;
+  font-weight: 700;
+  margin: auto;
+  border-style: solid;
+  display: block;
+  padding: 0.5em;
+  border-radius: 0.3em;
+  transition: all 1s;
+  cursor: pointer;
+  background-color: white;
+  color: green;
+  border-width: 0.5px;
+  border-color: black;
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
