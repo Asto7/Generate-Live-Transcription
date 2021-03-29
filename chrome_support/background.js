@@ -26,7 +26,20 @@ function sendMessageBackToContent(tabId, data) {
 }
 
 function turnOnStream(message, sender, sendResponse) {
-  if (!LiveStream[sender.tab.id]) captureCurrentTab(sender.tab.id);
+  // If this tab is not active
+  if (!LiveStream[sender.tab.id]) {
+    // deleting other subscriptions
+    for (const property in LiveStream) {
+      LiveStream[property].obj.stopRecording(); // Destruct obj
+      let stream = LiveStream[property].stream;
+      stream.getTracks().forEach((track) => {
+        track.stop();
+      });
+    }
+  }
+
+  //Subscribing the active tab
+  captureCurrentTab(sender.tab.id);
 }
 
 function turnOffStream(message, sender, sendResponse) {
