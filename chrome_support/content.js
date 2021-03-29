@@ -133,12 +133,7 @@ class Box {
 
     if (lines > 2) {
       let spans = this.box.getElementsByTagName("span");
-
-      for (let i = 0; i < spans.length - 1; i++) {
-        spans[i].remove();
-        lines = this.calcLines(this.box);
-        if (lines < 2) break;
-      }
+      for (let i = 0; i < spans.length - 1; i++) spans[i].remove(); // Except last remove all
     }
 
     this.clearCaptionId = setTimeout(() => {

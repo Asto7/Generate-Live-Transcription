@@ -30,7 +30,7 @@ class StreamToText {
   }
 
   createAudioProcessor(audioContext, audioSource) {
-    let processor = audioContext.createScriptProcessor(4096, 1, 1);
+    let processor = audioContext.createScriptProcessor(1024, 1, 1);
 
     const sampleRate = audioSource.context.sampleRate;
 
