@@ -1,17 +1,27 @@
+@import url("https://fonts.googleapis.com/css?family=Source+Code+Pro");
+
 body {
-  background-color: white;
-  width: 180px;
-  color: black;
+  background-color: rgb(17, 17, 17);
+  width: 20em;
+  font-size: 0.8em;
+  font-family: "Source Code Pro", monospace;
+  color: #6fc21c;
   text-align: left;
+}
+a {
+  color: #6fc21c;
+}
+#title {
+  font-size: 1.3em;
+  font-weight: 600;
 }
 h2 {
   text-align: center;
   margin-bottom: 0px;
 }
 hr {
-  border: 0.3px solid black;
+  border: 0.3px solid #579b0f;
 }
-
 img {
   margin-left: 10px;
 }
@@ -25,13 +35,11 @@ span {
   text-align: center;
 }
 
-#footer i {
-  color: #a31010;
-}
 #subscribeBtn {
   letter-spacing: 2px;
   font-weight: 700;
   margin: auto;
+  font-family: "Source Code Pro", monospace;
   border-style: solid;
   display: block;
   padding: 0.5em;
