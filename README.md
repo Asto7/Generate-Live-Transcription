@@ -1,1 +1,1 @@
-# Generate-Live-Transcription-BrowserExtension
+# Generate-Live-Transcription
