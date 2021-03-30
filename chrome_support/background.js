@@ -12,9 +12,8 @@ function receiver(message, sender, sendResponse) {
       break;
 
     default:
-      console.log("In Background js   ", message, sender, sendResponse);
+    // console.log("In Background js   ", message, sender, sendResponse);
   }
-
   return true;
 }
 
@@ -26,16 +25,23 @@ function sendMessageBackToContent(tabId, data) {
 }
 
 function turnOnStream(message, sender, sendResponse) {
-  // If this tab is not active
-  if (!LiveStream[sender.tab.id]) {
+  // Unsubcribing other tabs
+  for (const tabId in LiveStream) {
+    // Informing All Content.js to delete the caption div
+    chrome.tabs.sendMessage(parseInt(tabId), {
+      type: "removeCaption",
+    });
+
     // deleting other subscriptions
-    for (const property in LiveStream) {
-      LiveStream[property].obj.stopRecording(); // Destruct obj
-      let stream = LiveStream[property].stream;
-      stream.getTracks().forEach((track) => {
-        track.stop();
-      });
-    }
+    LiveStream[tabId].obj.stopRecording(); // Destruct obj
+
+    let stream = LiveStream[tabId].stream;
+    stream.getTracks().forEach((track) => {
+      track.stop();
+    });
+
+    // Deleting it
+    delete LiveStream[tabId];
   }
 
   //Subscribing the active tab
@@ -43,7 +49,7 @@ function turnOnStream(message, sender, sendResponse) {
 }
 
 function turnOffStream(message, sender, sendResponse) {
-  console.log("Stopped!");
+  // console.log("Stopped!");
 
   let streamToStop = LiveStream[sender.tab.id];
 
@@ -73,7 +79,7 @@ function captureCurrentTab(tabId) {
     value["stream"] = stream;
     value["obj"] = obj;
 
-    console.log(stream);
+    // console.log(stream);
     LiveStream[tabId] = value;
   });
 }

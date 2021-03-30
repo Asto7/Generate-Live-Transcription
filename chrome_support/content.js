@@ -18,8 +18,12 @@ function receiver(message, sender, sendResponse) {
       liveTranscription(message, sender, sendResponse);
       break;
 
+    case "removeCaption":
+      removeCaption(message, sender, sendResponse);
+      break;
+
     default:
-      console.log("In Content js   ", message, sender, sendResponse);
+    // console.log("In Content js   ", message, sender, sendResponse);
   }
 }
 
@@ -44,9 +48,17 @@ function subcribedBtnClicked(message, sender, sendResponse) {
 
 function liveTranscription(message, sender, sendResponse) {
   box.addText(message.value);
-  console.log(message.value);
 }
 
+function removeCaption(message, sender, sendResponse) {
+  if (box) {
+    box.remove();
+    box = null;
+  }
+  subscribed = false;
+}
+
+// Caption Div
 class Box {
   constructor() {
     let boxTemp = document.createElement("div");
@@ -61,9 +73,11 @@ class Box {
     boxTemp.style["left"] = "40%";
     boxTemp.style["background"] = "rgba(0,0,0,0.7)";
     boxTemp.style["width"] = "80%";
+    boxTemp.style["maxHeight"] = "45px";
+    boxTemp.style["overflowY"] = "hidden";
     boxTemp.style["padding"] = "7px";
     boxTemp.style["userSelect"] = "none";
-    boxTemp.style["borderRadius"] = "0.8em";
+    boxTemp.style["borderRadius"] = "0.3em";
     boxTemp.style["zIndex"] = "100000";
 
     document.body.appendChild(boxTemp);
@@ -97,50 +111,15 @@ class Box {
     this.box.style.left = `${boxRect.left + e.movementX}px`;
   }
 
-  calcLines(target) {
-    let style = window.getComputedStyle(target, null);
-    let height = parseInt(style.getPropertyValue("height"));
-    let font_size = parseInt(style.getPropertyValue("font-size"));
-    let line_height = parseInt(style.getPropertyValue("line-height"));
-    let box_sizing = style.getPropertyValue("box-sizing");
-
-    if (isNaN(line_height)) line_height = font_size * 1.2;
-
-    if (box_sizing == "border-box") {
-      let padding_top = parseInt(style.getPropertyValue("padding-top"));
-      let padding_bottom = parseInt(style.getPropertyValue("padding-bottom"));
-      let border_top = parseInt(style.getPropertyValue("border-top-width"));
-      let border_bottom = parseInt(
-        style.getPropertyValue("border-bottom-width")
-      );
-      height =
-        height - padding_top - padding_bottom - border_top - border_bottom;
-    }
-    let lines = Math.ceil(height / line_height);
-
-    return lines;
-  }
-
   addText(text) {
-    if (this.clearCaptionId) clearTimeout(this.clearCaptionId);
-    this.clearCaptionId = null;
+    this.box.innerHTML =
+      "<strong style = 'color: #6fc21c; font-family:  monospace;'>Asto/ </strong> ";
 
     let spanElm = document.createElement("span");
     spanElm.innerHTML = " " + text;
     this.box.appendChild(spanElm);
 
-    let lines = this.calcLines(this.box);
-
-    if (lines > 2) {
-      let spans = this.box.getElementsByTagName("span");
-      for (let i = 0; i < spans.length - 1; i++) spans[i].remove(); // Except last remove all
-    }
-
-    this.clearCaptionId = setTimeout(() => {
-      this.box.innerHTML =
-        "<strong style = 'color: #6fc21c; font-family:  monospace;'>Asto/ </strong> ";
-      this.clearCaptionId = null;
-    }, 4000);
+    this.box.scrollTop = this.box.scrollHeight;
   }
 
   init() {

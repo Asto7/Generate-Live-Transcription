@@ -1,14 +1,10 @@
 const http = require("http");
 const socketIO = require("socket.io");
 const DeepSpeech = require("deepspeech");
-const VAD = require("node-vad");
 
 let DEEPSPEECH_MODEL = __dirname + "/deepspeech-0.9.3-models"; // path to deepspeech english model directory
-let SILENCE_THRESHOLD = 200; // how many milliseconds of inactivity before processing the audio
 
 const SERVER_PORT = 4000; // websocket server port
-const VAD_MODE = VAD.Mode.VERY_AGGRESSIVE;
-const vad = new VAD(VAD_MODE);
 
 function createModel(modelDir) {
   let modelPath = modelDir + ".pbmm";
@@ -22,42 +18,21 @@ let englishModel = createModel(DEEPSPEECH_MODEL);
 
 let modelStream;
 let recordedChunks = 0;
-let silenceStart = null;
 let recordedAudioLength = 0;
-let endTimeout = null;
+let endInterval = null;
 let silenceBuffers = [];
+let firstTime = true;
 
 function processAudioStream(data, callback) {
-  vad.processAudio(data, 16000).then((res) => {
-    switch (res) {
-      case VAD.Event.ERROR:
-        console.log("VAD ERROR");
-        break;
+  processVoice(data);
 
-      case VAD.Event.NOISE:
-        console.log("VAD NOISE");
-        break;
-
-      case VAD.Event.SILENCE:
-        processSilence(data, callback);
-        break;
-
-      case VAD.Event.VOICE:
-        processVoice(data);
-        break;
-
-      default:
-        console.log("default", res);
-    }
-  });
-
-  // timeout after 1s of inactivity
-  clearTimeout(endTimeout);
-
-  endTimeout = setTimeout(function () {
-    console.log("timeout");
-    resetAudioStream();
-  }, 200);
+  if (firstTime) {
+    endInterval = setInterval(function () {
+      let results = intermediateDecode();
+      if (results && callback) callback(results);
+    }, 500);
+    firstTime = false;
+  }
 }
 
 function endAudioStream(callback) {
@@ -67,44 +42,27 @@ function endAudioStream(callback) {
   if (results && callback) callback(results);
 }
 
+function endConnection() {
+  console.log("[end connection]");
+
+  if (endInterval) clearInterval(endInterval);
+  if (modelStream) modelStream.finishStream(); // ignore results
+
+  endInterval = null;
+  firstTime = true;
+  recordedChunks = 0;
+  modelStream = null;
+}
+
 function resetAudioStream() {
-  clearTimeout(endTimeout);
   console.log("[reset]");
-  intermediateDecode(); // ignore results
+
+  clearTimeout(endInterval);
+  createStream(); // ignore results
+
+  firstTime = true;
   recordedChunks = 0;
   silenceStart = null;
-}
-
-function processSilence(data, callback) {
-  if (recordedChunks > 0) {
-    // recording is on
-    process.stdout.write("-"); // silence detected while recording
-
-    feedAudioContent(data);
-
-    if (silenceStart === null) {
-      silenceStart = new Date().getTime();
-    } else {
-      let now = new Date().getTime();
-      if (now - silenceStart > SILENCE_THRESHOLD) {
-        silenceStart = null;
-        console.log("[end]");
-        let results = intermediateDecode();
-
-        if (results && callback) callback(results);
-      }
-    }
-  } else {
-    process.stdout.write("."); // silence detected while not recording
-    bufferSilence(data);
-  }
-}
-
-function bufferSilence(data) {
-  // VAD has a tendency to cut the first bit of audio data from the start of a recording
-  // so keep a buffer of that first bit of audio and in addBufferedSilence() reattach it to the beginning of the recording
-  silenceBuffers.push(data);
-  if (silenceBuffers.length >= 3) silenceBuffers.shift();
 }
 
 function addBufferedSilence(data) {
@@ -121,7 +79,7 @@ function addBufferedSilence(data) {
   return audioBuffer;
 }
 
-function processVoice(data) {
+function processVoice(data, callback) {
   silenceStart = null;
   if (recordedChunks === 0) {
     console.log("");
@@ -140,28 +98,24 @@ function createStream() {
   recordedAudioLength = 0;
 }
 
-function finishStream() {
+function intermediateDecode() {
+  let results;
+
   if (modelStream) {
     let start = new Date();
-    let text = modelStream.finishStream();
+    let text = modelStream.intermediateDecode();
     if (text) {
       console.log("");
       console.log("Recognized Text:", text);
       let recogTime = new Date().getTime() - start.getTime();
-      return {
+      results = {
         text,
         recogTime,
         audioLength: Math.round(recordedAudioLength),
       };
     }
   }
-  silenceBuffers = [];
-  modelStream = null;
-}
 
-function intermediateDecode() {
-  let results = finishStream();
-  createStream();
   return results;
 }
 
@@ -172,7 +126,7 @@ function feedAudioContent(chunk) {
 
 const app = http.createServer(function (req, res) {
   res.writeHead(200);
-  res.write("web-stream-websocket");
+  res.write("generate-transcription");
   res.end();
 });
 
@@ -184,6 +138,7 @@ io.on("connection", function (socket) {
 
   socket.once("disconnect", () => {
     console.log("client disconnected");
+    endConnection();
   });
 
   createStream();
