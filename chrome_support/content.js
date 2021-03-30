@@ -44,7 +44,6 @@ function subcribedBtnClicked(message, sender, sendResponse) {
   if (subscribed) {
     chrome.runtime.sendMessage({ type: "turnOnStream" });
     if (!box) box = new Box();
-    box.init();
   } else chrome.runtime.sendMessage({ type: "turnOffStream" });
 }
 
@@ -64,9 +63,12 @@ function removeCaption(message, sender, sendResponse) {
 class Box {
   constructor() {
     let boxTemp = document.createElement("div");
-    boxTemp.innerHTML =
-      "<strong style = 'color: #6fc21c; font-family:  monospace;'>Asto/ </strong> ";
     boxTemp.className = "box";
+
+    boxTemp.innerHTML =
+      "<strong style = 'color: #6fc21c; font-family:  monospace;'>Asto/ </strong> "; //Flex lol
+
+    // Styling
     boxTemp.style["color"] = "white";
     boxTemp.style["fontSize"] = "2em";
     boxTemp.style["lineHeight"] = "1.2";
@@ -77,6 +79,7 @@ class Box {
     boxTemp.style["width"] = "80%";
     boxTemp.style["maxHeight"] = "45px";
     boxTemp.style["overflowY"] = "hidden";
+    boxTemp.style["cursor"] = "move";
     boxTemp.style["padding"] = "7px";
     boxTemp.style["userSelect"] = "none";
     boxTemp.style["borderRadius"] = "0.3em";
@@ -84,33 +87,12 @@ class Box {
 
     document.body.appendChild(boxTemp);
     this.box = boxTemp;
-    this.clearCaptionId = null;
-    this.handleMouseDown = this.handleMouseDown.bind(this);
-    this.handleMouseUp = this.handleMouseUp.bind(this);
-    this.handleMouseMove = this.handleMouseMove.bind(this);
+
+    this.dragElement(this.box);
   }
 
   remove() {
     this.box.remove();
-  }
-
-  handleMouseDown() {
-    this.box.style.cursor = "move";
-    this.box.addEventListener("mouseup", this.handleMouseUp);
-    document.body.addEventListener("mousemove", this.handleMouseMove);
-    document.body.addEventListener("mouseleave", this.handleMouseUp);
-  }
-
-  handleMouseUp() {
-    this.box.style.cursor = "default";
-    document.body.removeEventListener("mousemove", this.handleMouseMove);
-    document.body.removeEventListener("mouseleave", this.handleMouseUp);
-  }
-
-  handleMouseMove(e) {
-    const boxRect = this.box.getBoundingClientRect();
-    this.box.style.top = `${boxRect.top + e.movementY}px`;
-    this.box.style.left = `${boxRect.left + e.movementX}px`;
   }
 
   addText(text) {
@@ -124,7 +106,37 @@ class Box {
     this.box.scrollTop = this.box.scrollHeight;
   }
 
-  init() {
-    this.box.addEventListener("mousedown", this.handleMouseDown);
+  dragElement(ele) {
+    let pos1 = 0,
+      pos2 = 0,
+      pos3 = 0,
+      pos4 = 0;
+
+    ele.onmousedown = dragMouseDown;
+
+    function dragMouseDown(e) {
+      e = e || window.event;
+      e.preventDefault();
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      document.onmouseup = closeDragElement;
+      document.onmousemove = elementDrag;
+    }
+
+    function elementDrag(e) {
+      e = e || window.event;
+      e.preventDefault();
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      ele.style.top = ele.offsetTop - pos2 + "px";
+      ele.style.left = ele.offsetLeft - pos1 + "px";
+    }
+
+    function closeDragElement() {
+      document.onmouseup = null;
+      document.onmousemove = null;
+    }
   }
 }
