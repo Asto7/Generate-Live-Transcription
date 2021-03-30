@@ -36,7 +36,7 @@
 - [x] Make it more real-time
 - [x] Add Worker.js to do the heavy lifting task in the browser
 - [ ] Add support for other languages
-- [ ] Add support for other browsers
+- [ ] Add support for different browsers
 - [ ] Improvement in processing audio for large scale use
 - [ ] Add option to let user select colour combination for **Caption Div Element**
 - [ ] Add a feature to download the **Complete Caption** (Useful in making notes during classes :wink:)
