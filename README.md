@@ -24,9 +24,11 @@
 
 2. Click <b>Load unpacked extension</b> or drag the <b>chrome_support</b> folder with extension onto the page to load the extension. The new extension will be displayed on the page.
  
-## Screenshot
-<center><img src="https://user-images.githubusercontent.com/49583145/113029209-c5dc9400-91a9-11eb-811f-250c1f65784d.png" width="900"/></center>
+## Screen Recording
 
+<a target = _blank href="https://youtu.be/pqKPrE-BTAs?t=9s"> 
+ <img src="https://user-images.githubusercontent.com/49583145/113033295-7d73a500-91ae-11eb-873a-25ccd43a568d.png" width="900"/>
+</a>
 
 ## TODO
 
