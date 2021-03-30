@@ -39,4 +39,4 @@
 - [ ] Add support for other browsers
 - [ ] Improvement in processing audio for large scale use
 - [ ] Add option to let user select colour combination for **Caption Div Element**
-- [ ] Add a feature to download the **complete Caption** (Useful in making notes during classes :wink:)
+- [ ] Add a feature to download the **Complete Caption** (Useful in making notes during classes :wink:)
