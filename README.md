@@ -40,3 +40,9 @@
 - [ ] Improvement in processing audio for large scale use
 - [ ] Add option to let user select colour combination for **Caption Div Element**
 - [ ] Add a feature to download the **Complete Caption** (Useful in making notes during classes :wink:)
+
+
+## References!
+1. https://github.com/mozilla/DeepSpeech
+2. https://developer.chrome.com/docs/extensions/reference/
+3. https://github.com/mozilla/DeepSpeech-examples
