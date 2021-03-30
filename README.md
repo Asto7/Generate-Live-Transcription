@@ -26,8 +26,8 @@
  
 ## Screen Recording
 
-<a target = _blank href="https://youtu.be/pqKPrE-BTAs?t=9s"> 
- <img src="https://user-images.githubusercontent.com/49583145/113033295-7d73a500-91ae-11eb-873a-25ccd43a568d.png" width="900"/>
+<a target = "_blank" href="https://youtu.be/pqKPrE-BTAs?t=4s"> 
+ <img src="https://user-images.githubusercontent.com/49583145/113033295-7d73a500-91ae-11eb-873a-25ccd43a568d.png" width="1000"/>
 </a>
 
 ## TODO
