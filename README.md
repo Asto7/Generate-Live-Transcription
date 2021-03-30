@@ -20,15 +20,10 @@
 
 
 - #### To use Live Transcription Generator in Chrome, you need to add this extension.
+1. In the address bar on a new tab, type <b>chrome://extensions</b> to open the Extensions page. Select the <b>Developer mode</b> check box to enable loading extensions from a folder.
 
-<ol>
- <h6>
-  <li> In the address bar on a new tab, type <b>chrome://extensions</b> to open the Extensions page. Select the <b>Developer mode</b> check box to enable loading extensions from a folder.</li>
-
- <li> Click <b>Load unpacked extension</b> or drag the <b>chrome_support</b> folder with extension onto the page to load the extension. The new extension will be displayed on the page.</li>
- </h6>
-</ol>
-
+2. Click <b>Load unpacked extension</b> or drag the <b>chrome_support</b> folder with extension onto the page to load the extension. The new extension will be displayed on the page.
+ 
 ## Screenshot
 <center><img src="https://user-images.githubusercontent.com/49583145/113029209-c5dc9400-91a9-11eb-811f-250c1f65784d.png" width="900"/></center>
 
