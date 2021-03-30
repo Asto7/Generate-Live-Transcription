@@ -8,7 +8,7 @@ function receiver(message, sender, sendResponse) {
       break;
 
     case "turnOffStream":
-      turnOffStream(message, sender, sendResponse);
+      turnOffStream(sender.tab.id);
       break;
 
     default:
@@ -17,6 +17,12 @@ function receiver(message, sender, sendResponse) {
   return true;
 }
 
+// [Event Listeners]
+chrome.tabs.onRemoved.addListener(function (tabId, info) {
+  turnOffStream(tabId); // If the Closed Tab was subscribed
+});
+
+// [Functions]
 function sendMessageBackToContent(tabId, data) {
   chrome.tabs.sendMessage(tabId, {
     type: "liveTranscription",
@@ -32,28 +38,20 @@ function turnOnStream(message, sender, sendResponse) {
       type: "removeCaption",
     });
 
-    // deleting other subscriptions
-    LiveStream[tabId].obj.stopRecording(); // Destruct obj
-
-    let stream = LiveStream[tabId].stream;
-    stream.getTracks().forEach((track) => {
-      track.stop();
-    });
-
-    // Deleting it
-    delete LiveStream[tabId];
+    turnOffStream(tabId);
   }
 
   //Subscribing the active tab
   captureCurrentTab(sender.tab.id);
 }
 
-function turnOffStream(message, sender, sendResponse) {
+function turnOffStream(tabId) {
   // console.log("Stopped!");
 
-  let streamToStop = LiveStream[sender.tab.id];
+  let streamToStop = LiveStream[tabId];
 
   if (streamToStop) {
+    // deleting other subscriptions
     streamToStop.obj.stopRecording(); // Destruct obj
 
     let stream = streamToStop.stream;
@@ -62,7 +60,8 @@ function turnOffStream(message, sender, sendResponse) {
     });
   }
 
-  delete LiveStream[sender.tab.id];
+  // Deleting it
+  delete LiveStream[tabId];
 }
 
 function captureCurrentTab(tabId) {
@@ -83,3 +82,5 @@ function captureCurrentTab(tabId) {
     LiveStream[tabId] = value;
   });
 }
+
+// chrome.tabs.get(tabId, function (tab) {});

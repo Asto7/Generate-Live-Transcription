@@ -11,7 +11,7 @@
   "background": {
     "page": "background.html"
   },
-  "permissions": ["tabCapture", "desktopCapture", "tabs", "desktopCapture"],
+  "permissions": ["tabCapture"],
   "browser_action": {
     "default_icon": "./assets/logo.png",
     "default_popup": "popup.html"

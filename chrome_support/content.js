@@ -1,5 +1,7 @@
 let subscribed = false;
 let box = null;
+chrome.runtime.sendMessage({ type: "turnOffStream" }); // Remove Stream if it was On before reload
+
 // chrome.storage.local.set({ subscribed: subscribed });
 
 chrome.runtime.onMessage.addListener(receiver);
@@ -27,7 +29,7 @@ function receiver(message, sender, sendResponse) {
   }
 }
 
-// Functions Implementation
+// [Functions]
 function getSubscription(message, sender, sendResponse) {
   sendResponse(subscribed);
 }
@@ -58,7 +60,7 @@ function removeCaption(message, sender, sendResponse) {
   subscribed = false;
 }
 
-// Caption Div
+// [Caption Div]
 class Box {
   constructor() {
     let boxTemp = document.createElement("div");

@@ -18,7 +18,6 @@ let englishModel = createModel(DEEPSPEECH_MODEL);
 
 let modelStream;
 let recordedChunks = 0;
-let recordedAudioLength = 0;
 let endInterval = null;
 let silenceBuffers = [];
 let firstTime = true;
@@ -81,6 +80,7 @@ function addBufferedSilence(data) {
 
 function processVoice(data, callback) {
   silenceStart = null;
+
   if (recordedChunks === 0) {
     console.log("");
     process.stdout.write("[start]"); // recording started
@@ -95,23 +95,17 @@ function processVoice(data, callback) {
 function createStream() {
   modelStream = englishModel.createStream();
   recordedChunks = 0;
-  recordedAudioLength = 0;
 }
 
 function intermediateDecode() {
   let results;
 
   if (modelStream) {
-    let start = new Date();
     let text = modelStream.intermediateDecode();
     if (text) {
-      console.log("");
-      console.log("Recognized Text:", text);
-      let recogTime = new Date().getTime() - start.getTime();
+      console.log("\nRecognized Text:", text);
       results = {
         text,
-        recogTime,
-        audioLength: Math.round(recordedAudioLength),
       };
     }
   }
@@ -120,7 +114,6 @@ function intermediateDecode() {
 }
 
 function feedAudioContent(chunk) {
-  recordedAudioLength += (chunk.length / 2) * (1 / 16000) * 1000;
   modelStream.feedAudioContent(chunk);
 }
 
