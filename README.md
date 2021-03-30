@@ -23,9 +23,9 @@
 
 <ol>
  <h6>
- <li> In the address bar on a new tab, type **chrome://extensions** to open the Extensions page. Select the **Developer mode** check box to enable loading extensions from a folder.</li>
+  <li> In the address bar on a new tab, type <b>chrome://extensions</b> to open the Extensions page. Select the <b>Developer mode</b> check box to enable loading extensions from a folder.</li>
 
- <li> Click **Load unpacked extension** or drag the **chrome_support** folder with extension onto the page to load the extension. The new extension will be displayed on the page.</li>
+ <li> Click <b>Load unpacked extension</b> or drag the <b>chrome_support</b> folder with extension onto the page to load the extension. The new extension will be displayed on the page.</li>
  </h6>
 </ol>
 
