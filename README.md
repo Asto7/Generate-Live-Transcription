@@ -42,7 +42,7 @@
 - [ ] Add support for different browsers
 - [ ] Improvement in processing audio for large scale use
 - [ ] Add option to let user select colour combination for **Caption Div Element**
-- [ ] Add a feature to download the **Complete Caption** (Useful in making notes during classes :wink:)
+- [x] Add a feature to download the **Complete Caption** (Useful in making notes during classes :wink:)
 
 ## Support
 
