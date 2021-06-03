@@ -1,6 +1,8 @@
 let subscribed = false;
 let box = null;
-chrome.runtime.sendMessage({ type: "turnOffStream" }); // Remove Stream if it was On before reload
+let text = "";
+
+chrome.runtime.sendMessage({ type: "turnOffStream" }); // Removes Stream if it was On before reload
 
 // chrome.storage.local.set({ subscribed: subscribed });
 
@@ -14,6 +16,10 @@ function receiver(message, sender, sendResponse) {
 
     case "subcribedBtnClicked":
       subcribedBtnClicked(message, sender, sendResponse);
+      break;
+
+    case "saveBtnClicked":
+      saveBtnClicked(message, sender, sendResponse);
       break;
 
     case "liveTranscription":
@@ -34,6 +40,11 @@ function getSubscription(message, sender, sendResponse) {
   sendResponse(subscribed);
 }
 
+function saveBtnClicked(message, sender, sendResponse) {
+  if (!text || text.length <= 0) return;
+  downloadSubtitle(text);
+}
+
 function subcribedBtnClicked(message, sender, sendResponse) {
   subscribed = message.value;
   if (box) {
@@ -42,12 +53,14 @@ function subcribedBtnClicked(message, sender, sendResponse) {
   }
 
   if (subscribed) {
+    text = "";
     chrome.runtime.sendMessage({ type: "turnOnStream" });
     if (!box) box = new Box();
   } else chrome.runtime.sendMessage({ type: "turnOffStream" });
 }
 
 function liveTranscription(message, sender, sendResponse) {
+  text = message.value;
   box.addText(message.value);
 }
 
@@ -57,6 +70,24 @@ function removeCaption(message, sender, sendResponse) {
     box = null;
   }
   subscribed = false;
+}
+
+// Tool
+function downloadSubtitle(text) {
+  let filename = "subtitle";
+  let element = document.createElement("a");
+  element.setAttribute(
+    "href",
+    "data:text/plain;charset=utf-8," + encodeURIComponent(text)
+  );
+  element.setAttribute("download", filename);
+
+  element.style.display = "none";
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
 }
 
 // [Caption Div]
